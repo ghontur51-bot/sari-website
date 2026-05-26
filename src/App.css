@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+:root {
+  --color-bg: #FAF6F0;
+  --color-card: #FAF1E6;
+  --color-text-main: #2B1F1D;
+  --color-text-muted: #6B5650;
+  --color-primary: #B87D4B;
+  --color-primary-hover: #9E6535;
+  --color-accent: #E8D5C4;
+  --color-accent-light: #F4EAD4;
+  --color-sage: #8A9A86;
+  --color-sage-light: #E2E9E1;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+/* Typography */
+.font-serif {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.02em;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Organic Background Decoration */
+.kolka-shell {
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(circle at 10% 15%, rgba(184, 125, 75, 0.04) 0%, transparent 25%),
+    radial-gradient(circle at 80% 30%, rgba(138, 154, 134, 0.06) 0%, transparent 20%),
+    radial-gradient(circle at 50% 80%, rgba(232, 213, 196, 0.2) 0%, transparent 35%);
+}
+
+/* Glassmorphic Navbar */
+.kolka-nav {
+  border-bottom: 1px solid rgba(184, 125, 75, 0.08);
+  background-color: rgba(250, 246, 240, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hero Section */
+.kolka-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #FAF6F0;
+}
+
+.kolka-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(180deg, rgba(250, 246, 240, 0.3) 0%, rgba(250, 246, 240, 0.95) 100%),
+    radial-gradient(circle at 80% 20%, rgba(184, 125, 75, 0.15), transparent 25%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Wavy Divider - Torn / Wave Effect */
+.wavy-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+  z-index: 2;
+}
+
+.wavy-divider svg {
+  position: relative;
+  display: block;
+  width: calc(130% + 1.3px);
+  height: 60px;
+}
+
+.wavy-divider .shape-fill {
+  fill: #FAF6F0;
+}
+
+/* Product Section & Cards */
+.kolka-menu-section {
+  position: relative;
+  background-color: var(--color-bg);
+}
+
+.kolka-product-card {
+  background-color: var(--color-card);
+  border: 1px solid rgba(184, 125, 75, 0.08);
+  box-shadow: 0 10px 25px -10px rgba(74, 53, 37, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kolka-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 35px -15px rgba(184, 125, 75, 0.12);
+  border-color: rgba(184, 125, 75, 0.25);
+}
+
+/* Hub Section */
+.kolka-hub-section {
+  background-color: #F6EFE5;
+  position: relative;
+  overflow: hidden;
+}
+
+.kolka-hub-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 90% 10%, rgba(184, 125, 75, 0.07), transparent 30%);
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pureFadeInOut {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-pure-fade-in-out {
+  animation: pureFadeInOut 4.5s ease-in-out forwards;
+}
+
+@keyframes slideInUp12 {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-from-bottom-12 {
+  animation: slideInUp12 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.slide-in-from-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes zoomIn95 {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.zoom-in-95 {
+  animation: zoomIn95 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-rich-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Form inputs & UI elements styling */
+input, textarea, select {
+  color: var(--color-text-main);
+  background-color: #FAF8F5;
+  border: 1px solid rgba(184, 125, 75, 0.15);
+  transition: all 0.3s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-primary);
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(184, 125, 75, 0.1);
+}
+
+/* Custom rounded-shape-card style */
+.organic-card {
+  border-radius: 40px 10px 40px 10px;
+}
+
+.organic-card-reverse {
+  border-radius: 10px 40px 10px 40px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .animate-pure-fade-in-out,
+  .animate-rich-float,
+  .slide-in-from-bottom-12,
+  .slide-in-from-right,
+  .zoom-in-95 {
+    animation: none !important;
+  }
+}
