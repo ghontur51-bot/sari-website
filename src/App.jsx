@@ -493,99 +493,37 @@ export default function App() {
         customer: customerData,
         items: cart,
         total: cartTotal,
-        status: 'pending',
+        status: 'pending', // Pending status matches the Accept/Reject order flow
+        payment_id: "bypass_pay_" + Math.random().toString(36).substr(2, 9),
+        razorpay_order_id: "bypass_order_" + Math.random().toString(36).substr(2, 9),
         shiprocket_ready: true,
         package_details: {
-          weight: 0.5, // 500 grams standard dress/sari
+          weight: 0.5,
           length: 30,
           width: 25,
           height: 5
-        }
+        },
+        createdAt: serverTimestamp()
       };
 
-      // Check if server is running local API or fallback mock order directly
-      let orderData = { order: null };
+      // Directly save order document in Firestore (bypassing real money transactions)
+      const docRef = await addDoc(collection(db, 'orders'), data);
+
+      // Trigger Shiprocket order creation in the background silently
       try {
-        const res = await fetch('/api/createOrder', {
+        await fetch('/api/createShiprocketOrder', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: cartTotal })
+          body: JSON.stringify({ orderDetails: { ...data, orderId: docRef.id } })
         });
-        orderData = await res.json();
-      } catch(err) {
-        console.warn("API endpoints not fully active in local dev fallback. Simulating order placement...");
-        // In local mock mode, bypass Razorpay and simulate successful purchase
-        data.payment_id = "mock_pay_" + Math.random().toString(36).substr(2, 9);
-        data.razorpay_order_id = "mock_order_" + Math.random().toString(36).substr(2, 9);
-        data.status = 'paid';
-        data.createdAt = serverTimestamp();
-
-        setCart([]);
-        setIsCheckoutModalOpen(false);
-        triggerSuccessExperience("Purchase Confirmed!", "Your boutique order has been placed successfully.");
-        setBookingView('dashboard');
-        
-        await addDoc(collection(db, 'orders'), data);
-        setIsLoading(false);
-        return;
+      } catch(e) {
+        console.warn("Shiprocket API call bypassed.");
       }
-      
-      if (!orderData.order) throw new Error("Could not create Razorpay order. Check API.");
 
-      const isLoaded = await loadRazorpay();
-      if (!isLoaded) throw new Error("Razorpay SDK failed to load. Are you offline?");
-
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SlLNPssVEb5UN1',
-        amount: orderData.order.amount,
-        currency: "INR",
-        name: "Kolkaa Atelier",
-        description: "Boutique Apparel Purchase",
-        order_id: orderData.order.id,
-        handler: async function (response) {
-          data.payment_id = response.razorpay_payment_id;
-          data.razorpay_order_id = response.razorpay_order_id;
-          data.razorpay_signature = response.razorpay_signature;
-          data.status = 'paid';
-          data.createdAt = serverTimestamp();
-
-          setCart([]);
-          setIsCheckoutModalOpen(false);
-          triggerSuccessExperience("Payment Successful!", "Your gorgeous piece is now secured.");
-          setBookingView('dashboard');
-
-          addDoc(collection(db, 'orders'), data)
-            .then(async (docRef) => {
-              try {
-                await fetch('/api/createShiprocketOrder', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ orderDetails: { ...data, orderId: docRef.id } })
-                });
-              } catch(e) {
-                console.error("Failed to call Shiprocket API route:", e);
-              }
-            })
-            .catch(err => {
-              console.error("Firebase Sync Error", err);
-            });
-        },
-        prefill: {
-          name: customerData.name,
-          email: user.email,
-          contact: customerData.phone
-        },
-        theme: {
-          color: COLORS.primary
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response){
-        alert("Payment Failed: " + response.error.description);
-      });
-      rzp.open();
-
+      setCart([]);
+      setIsCheckoutModalOpen(false);
+      triggerSuccessExperience("Purchase Confirmed!", "Your boutique order has been placed successfully.");
+      setBookingView('dashboard');
     } catch (err) {
       console.error(err);
       alert("Checkout Error: " + err.message);
