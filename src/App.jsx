@@ -242,7 +242,7 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState(null);
   const [bookingType, setBookingType] = useState('styling'); // 'styling' or 'bridal'
   
   // Auth & Dashboard States
@@ -731,7 +731,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="md:col-span-6 flex justify-center items-center relative">
+          <div className="hidden md:flex md:col-span-6 justify-center items-center relative">
             {/* Organic rounded picture framing */}
             <div className="w-[85%] md:w-[90%] aspect-[4/5] bg-[#FAF1E6] organic-card overflow-hidden shadow-2xl relative border-4 border-white/60 animate-rich-float">
               <img 
@@ -947,7 +947,7 @@ export default function App() {
             </button>
 
             {/* Left Column: Image Slider */}
-            <div className="w-full md:w-1/2 shrink-0 bg-[#FAF1E6] relative p-6 flex flex-col justify-center items-center overflow-hidden border-b md:border-b-0 md:border-r border-[#B87D4B]/10">
+            <div className="w-full md:w-1/2 h-[38vh] md:h-auto shrink-0 bg-[#FAF1E6] relative p-4 md:p-6 flex flex-col justify-center items-center overflow-hidden border-b md:border-b-0 md:border-r border-[#B87D4B]/10">
               <div className="w-full aspect-[4/5] flex items-center justify-center p-2 mb-4">
                 <img
                   onClick={() => setZoomedImage(Array.isArray(selectedProduct.images) ? selectedProduct.images[selectedImageIdx] : selectedProduct.images)}
@@ -974,8 +974,8 @@ export default function App() {
             </div>
 
             {/* Right Column: Customizer & Details */}
-            <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-between overflow-y-auto text-left">
-              <div className="space-y-6">
+            <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col h-[52vh] md:h-auto overflow-hidden text-left bg-[#FAF6F0]">
+              <div className="flex-1 overflow-y-auto space-y-6 pr-1.5 scrollbar-thin">
                 <div className="space-y-2">
                   <span className="text-[9px] uppercase font-bold tracking-[0.2em] text-[#B87D4B] bg-[#E8D5C4]/30 px-3 py-1 rounded-full">{selectedProduct.category}</span>
                   <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#2B1F1D] leading-tight pt-1">{selectedProduct.name}</h2>
@@ -1041,11 +1041,11 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-4 border-t border-[#B87D4B]/10 mt-3 shrink-0">
                 <Button 
                   variant="primary" 
                   disabled={!isSizeSelectionComplete} 
-                  className="w-full py-4 text-sm font-bold uppercase tracking-wider shadow-lg shadow-[#B87D4B]/10" 
+                  className="w-full py-3.5 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider shadow-lg shadow-[#B87D4B]/10" 
                   onClick={() => {
                     if (user?.uid) {
                       if (rememberSize) {
@@ -1286,6 +1286,15 @@ export default function App() {
           <div className="absolute inset-0 bg-black/85 backdrop-blur-[3px]" onClick={() => setZoomedImage(null)} />
           <button onClick={() => setZoomedImage(null)} className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all"><X size={20} /></button>
           <img src={zoomedImage} alt="Fullscreen preview" className="relative max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-in" />
+        </div>
+      )}
+      {/* FLOAT TOAST FEEDBACK NOTIFICATION */}
+      {feedback && (
+        <div className="fixed bottom-8 left-0 right-0 z-[3500] flex justify-center px-4 pointer-events-none">
+          <div className="bg-[#2B1F1D]/95 text-[#FAF6F0] backdrop-blur-md px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10 text-[11px] font-bold tracking-wider uppercase animate-in pointer-events-auto">
+            <CheckCircle2 size={15} className="text-[#B87D4B]" />
+            <span>{feedback}</span>
+          </div>
         </div>
       )}
     </div>
